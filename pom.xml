@@ -139,7 +139,13 @@
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-boot-starter</artifactId>
 			<version>${springfox.version}</version>
-		</dependency>		
+		</dependency>
+		<!--18.4. Gerando a documentação da API em HTML com Swagger UI e SpringFox - 1'30"  -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>${springfox.version}</version>
+		</dependency>				
 	</dependencies>
 
 	<build>
