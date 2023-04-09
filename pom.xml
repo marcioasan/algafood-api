@@ -145,7 +145,13 @@
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>${springfox.version}</version>
-		</dependency>				
+		</dependency>
+		<!--18.11. Descrevendo restrições de validação de propriedades do modelo - 2'30"  -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-bean-validators</artifactId>
+			<version>${springfox.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
