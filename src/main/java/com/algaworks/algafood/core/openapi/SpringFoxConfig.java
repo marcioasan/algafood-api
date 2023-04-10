@@ -40,6 +40,9 @@ public class SpringFoxConfig {
 				.build()
 				.useDefaultResponseMessages(false) //18.12. Descrevendo códigos de status de respostas de forma global - 2'20"
 				.globalResponses(HttpMethod.GET, globalGetResponseMessages()) //18.12. Descrevendo códigos de status de respostas de forma global - 3'30", OBS: ver o conteúdo de apoio
+	            .globalResponses(HttpMethod.POST, globalPostPutResponseMessages())
+	            .globalResponses(HttpMethod.PUT, globalPostPutResponseMessages())
+	            .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())				
 				.apiInfo(apiInfo())//18.6. Descrevendo informações da API na documentação - 2'20"
 				.tags(new Tag("Cidades", "Gerência de cidades")); //18.7. Descrevendo tags na documentação e associando com controllers
 	}
@@ -56,7 +59,42 @@ public class SpringFoxConfig {
 		          .description("Recurso não possui representação que pode ser aceita pelo consumidor")
 		          .build()
 		  );
-		}	
+	}
+	
+	  private List<Response> globalPostPutResponseMessages() {
+		    return Arrays.asList(
+		        new ResponseBuilder()
+		            .code(String.valueOf(HttpStatus.BAD_REQUEST.value()))
+		            .description("Requisição inválida (erro do cliente)")
+		            .build(),
+		        new ResponseBuilder()
+		            .code(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()))
+		            .description("Erro interno no servidor")
+		            .build(),
+		        new ResponseBuilder()
+		            .code(String.valueOf(HttpStatus.NOT_ACCEPTABLE.value()))
+		            .description("Recurso não possui representação que poderia ser aceita pelo consumidor")
+		            .build(),
+		        new ResponseBuilder()
+		            .code(String.valueOf(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()))
+		            .description("Requisição recusada porque o corpo está em um formato não suportado")
+		            .build()
+		    );
+	  }
+	  
+	  //18.13. Desafio: descrevendo códigos de status de respostas de forma global
+	  private List<Response> globalDeleteResponseMessages() {
+		    return Arrays.asList(
+		        new ResponseBuilder()
+		            .code(String.valueOf(HttpStatus.BAD_REQUEST.value()))
+		            .description("Requisição inválida (erro do cliente)")
+		            .build(),
+		        new ResponseBuilder()
+		            .code(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()))
+		            .description("Erro interno no servidor")
+		            .build()
+		    );
+	  }
 	
 	//18.6. Descrevendo informações da API na documentação
 	private ApiInfo apiInfo() {
