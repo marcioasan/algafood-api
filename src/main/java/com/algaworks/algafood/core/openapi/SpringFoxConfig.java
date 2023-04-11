@@ -3,12 +3,17 @@ package com.algaworks.algafood.core.openapi;
 import java.util.Arrays;
 import java.util.List;
 
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import com.algaworks.algafood.api.exceptionhandler.Problem;
+import com.fasterxml.classmate.TypeResolver;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -20,6 +25,7 @@ import springfox.documentation.service.Contact;
 import springfox.documentation.service.Response;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.spring.web.plugins.Docket;
 
 //18.3. Gerando a definição OpenAPI em JSON com SpringFox - 4'50"
@@ -31,6 +37,9 @@ public class SpringFoxConfig {
 
 	@Bean
 	public Docket apiDocket() {
+		
+		var typeResolver = new TypeResolver(); //18.14. Descrevendo o modelo de representação de problema - 3'
+		
 		return new Docket(DocumentationType.OAS_30)
 				.select()
 //					.apis(RequestHandlerSelectors.any())
@@ -42,10 +51,18 @@ public class SpringFoxConfig {
 				.globalResponses(HttpMethod.GET, globalGetResponseMessages()) //18.12. Descrevendo códigos de status de respostas de forma global - 3'30", OBS: ver o conteúdo de apoio
 	            .globalResponses(HttpMethod.POST, globalPostPutResponseMessages())
 	            .globalResponses(HttpMethod.PUT, globalPostPutResponseMessages())
-	            .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())				
+	            .globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
+	            .additionalModels(typeResolver.resolve(Problem.class)) //18.14. Descrevendo o modelo de representação de problema - 2'
 				.apiInfo(apiInfo())//18.6. Descrevendo informações da API na documentação - 2'20"
 				.tags(new Tag("Cidades", "Gerência de cidades")); //18.7. Descrevendo tags na documentação e associando com controllers
 	}
+	
+	//18.14. Descrevendo o modelo de representação de problema - ver o conteúdo de apoio
+	@Bean
+	public JacksonModuleRegistrar springFoxJacksonConfig() {
+		return objectMapper -> objectMapper.registerModule(new JavaTimeModule());
+	}
+	
 	
 	//18.12. Descrevendo códigos de status de respostas de forma global - 4'50", OBS: ver o conteúdo de apoio
 	private List<Response> globalGetResponseMessages() {

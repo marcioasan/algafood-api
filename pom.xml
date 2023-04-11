@@ -152,6 +152,11 @@
 			<artifactId>springfox-bean-validators</artifactId>
 			<version>${springfox.version}</version>
 		</dependency>
+		<!--18.14. Descrevendo o modelo de representação de problema - ver conteúdo de apoio  -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.datatype</groupId>
+		    <artifactId>jackson-datatype-jsr310</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
