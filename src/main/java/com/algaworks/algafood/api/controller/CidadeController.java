@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.algaworks.algafood.api.assembler.CidadeInputDisassembler;
 import com.algaworks.algafood.api.assembler.CidadeModelAssembler;
+import com.algaworks.algafood.api.exceptionhandler.Problem;
 import com.algaworks.algafood.api.model.CidadeModel;
 import com.algaworks.algafood.api.model.input.CidadeInput;
 import com.algaworks.algafood.domain.exception.EstadoNaoEncontradoException;
@@ -29,6 +30,8 @@ import com.algaworks.algafood.domain.service.CadastroCidadeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
 @Api(tags = "Cidades") //18.7. Descrevendo tags na documentação e associando com controllers - 1'40" - Referencia o atributo tags configurado na classe SpringFoxConfig no método apiDocket() .tags
 @RestController
@@ -58,7 +61,11 @@ public class CidadeController {
 	
 	
 	
-	@ApiOperation("Busca uma cidade por ID") //18.8. Descrevendo as operações de endpoints na documentação	
+	@ApiOperation("Busca uma cidade por ID") //18.8. Descrevendo as operações de endpoints na documentação
+	@ApiResponses({ //18.16. Descrevendo códigos de status de respostas em endpoints específicos - 3'
+		@ApiResponse(code = 400, message = "ID da cidade inválido", response = Problem.class),
+		@ApiResponse(code = 404, message = "Cidade não encontrada", response = Problem.class)
+	})
 	@GetMapping("/{cidadeId}") //8.6. Desafio: refatorando os serviços REST
 	public CidadeModel buscar(
 			@ApiParam(value = "ID de uma cidade", example = "1") //18.9. Descrevendo parâmetros de entrada na documentação - 1', 2'10", 3'45" não exibiu no html o exemplo. Olhando os posts da aula, foi informaod que o SpringFox foi descontinuado e irão usar o SpringDoc mais a frente.
@@ -85,6 +92,9 @@ public class CidadeController {
 	
 	
 	@ApiOperation("Cadastra uma cidade")
+	@ApiResponses({ //18.16. Descrevendo códigos de status de respostas em endpoints específicos - 5'30"
+		@ApiResponse(code = 201, message = "Cidade cadastrada")
+	})
 	@PostMapping //11.20. Desafio: usando DTOs como representation model
 	@ResponseStatus(HttpStatus.CREATED)
 	public CidadeModel adicionar(
@@ -145,6 +155,10 @@ public class CidadeController {
     
     
 	@ApiOperation("Atualiza uma cidade por ID")
+	@ApiResponses({ //18.16. Descrevendo códigos de status de respostas em endpoints específicos - 6'30"
+		@ApiResponse(code = 200, message = "Cidade atualizada"),
+		@ApiResponse(code = 404, message = "Cidade não encontrada", response = Problem.class)
+	})
 	@PutMapping("/{cidadeId}")
 	public CidadeModel atualizar(
 			@ApiParam(value = "ID de uma cidade", example = "1")
@@ -200,7 +214,11 @@ public class CidadeController {
     
     
     
-	@ApiOperation("Exclui uma cidade por ID")    
+	@ApiOperation("Exclui uma cidade por ID")
+	@ApiResponses({ //18.16. Descrevendo códigos de status de respostas em endpoints específicos - 6'30"
+		@ApiResponse(code = 204, message = "Cidade excluída"),
+		@ApiResponse(code = 404, message = "Cidade não encontrada", response = Problem.class)
+	})
     @DeleteMapping("/{cidadeId}") //8.6. Desafio: refatorando os serviços REST
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remover(
